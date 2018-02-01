@@ -2,6 +2,9 @@ from django.db import models
 
 
 class Ingredient(models.Model):
+    """
+    This model contains ingredients for a pizza
+    """
     name = models.CharField(max_length=50)
     cost = models.DecimalField(max_digits=5, decimal_places=2)
 
