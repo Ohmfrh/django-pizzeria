@@ -19,10 +19,13 @@ class Pizza(models.Model):
     ingredients = models.ManyToManyField('place.Ingredient', through='place.PizzaRecipe')
 
     def __str__(self):
-        return f"{self.name} -> {self.ingredients.all()}"
+        return f"{self.name} -> {list(self.ingredients.all().values_list('name', flat=True))}"
 
 
 class PizzaRecipe(models.Model):
-    pizza_id = models.ForeignKey('place.Pizza', on_delete=models.CASCADE)
-    igredient_id = models.ForeignKey('place.Ingredient', on_delete=models.CASCADE)
+    pizza = models.ForeignKey('place.Pizza', on_delete=models.CASCADE)
+    ingredient = models.ForeignKey('place.Ingredient', on_delete=models.CASCADE)
     portion = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.pizza.name} ingredient: {self.ingredient.name}"
