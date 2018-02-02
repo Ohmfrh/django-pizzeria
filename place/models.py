@@ -29,3 +29,21 @@ class PizzaRecipe(models.Model):
 
     def __str__(self):
         return f"{self.pizza.name} ingredient: {self.ingredient.name}"
+
+
+class Customer(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=150)
+
+
+class Order(models.Model):
+
+    customer = models.ForeignKey('place.Customer', on_delete=models.SET_NULL, null=True)
+    placeholders = models.ManyToManyField('place.Pizza', through='place.Placeholder')
+
+
+class Placeholder(models.Model):
+    quantity = models.IntegerField()
+
+    pizza = models.ForeignKey('place.Pizza', on_delete=models.CASCADE)
+    order = models.ForeignKey('place.Order', on_delete=models.CASCADE)
