@@ -50,10 +50,12 @@ class Order(models.Model):
         return f"Order {self.pk}, Customer: {self.customer} Total: ${self.get_total()}"
 
     def get_total(self):
-        total = Decimal(0)
-        for placeholder in self.placeholder_set.all():
-            total += placeholder.get_subtotal()
-        return total
+        return self.placeholder_set.all().aggregate(
+            total=models.Sum(
+                models.F('pizza__price') * models.F('quantity'),
+                output_field=models.DecimalField(decimal_places=2)
+            )
+        )['total']
 
 
 class Placeholder(models.Model):
