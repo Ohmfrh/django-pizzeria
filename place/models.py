@@ -1,3 +1,5 @@
+from _decimal import Decimal
+
 from django.db import models
 
 
@@ -19,7 +21,7 @@ class Pizza(models.Model):
     ingredients = models.ManyToManyField('place.Ingredient', through='place.PizzaRecipe')
 
     def __str__(self):
-        return f"{self.name} -> {list(self.ingredients.all().values_list('name', flat=True))}"
+        return f"{self.name}"
 
 
 class PizzaRecipe(models.Model):
@@ -35,11 +37,23 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=150)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Order(models.Model):
 
     customer = models.ForeignKey('place.Customer', on_delete=models.SET_NULL, null=True)
-    placeholders = models.ManyToManyField('place.Pizza', through='place.Placeholder')
+    pizzas = models.ManyToManyField('place.Pizza', through='place.Placeholder')
+
+    def __str__(self):
+        return f"Order {self.pk}, Customer: {self.customer} Total: ${self.get_total()}"
+
+    def get_total(self):
+        total = Decimal(0)
+        for placeholder in self.placeholder_set.all():
+            total += placeholder.get_subtotal()
+        return total
 
 
 class Placeholder(models.Model):
@@ -47,3 +61,9 @@ class Placeholder(models.Model):
 
     pizza = models.ForeignKey('place.Pizza', on_delete=models.CASCADE)
     order = models.ForeignKey('place.Order', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.order}: {self.pizza} ({self.quantity}): $ {self.get_subtotal()}"
+
+    def get_subtotal(self):
+        return Decimal(self.quantity) * self.pizza.price
