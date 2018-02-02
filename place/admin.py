@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import Pizza, Ingredient, PizzaRecipe
+from django.apps import apps
 
-admin.site.register(Pizza)
-admin.site.register(Ingredient)
-admin.site.register(PizzaRecipe)
+
+app = apps.get_app_config('place')
+
+for model_name, model in app.models.items():
+    admin.site.register(model)
