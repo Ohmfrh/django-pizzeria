@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'pizza.urls'
+ROOT_URLCONF = 'pizzeria.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pizza.wsgi.application'
+WSGI_APPLICATION = 'pizzeria.wsgi.application'
 
 
 # Database
