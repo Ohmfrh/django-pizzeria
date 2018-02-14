@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*x+8_f3+5*jgy)w9s#w1wn^^zxk+gz#^bz0l%9g*ok*rs+&9v+'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'pizzeria.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pizzeria',
-        'USER': 'CZqHIIZGHbfUtUpx',
-        'PASSWORD': 'lkJcD7r8CbB18REc7KE2iuYIFQXZNfcVZSlqodDEQ8',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': 'postgres',
         'PORT': '',
     },
