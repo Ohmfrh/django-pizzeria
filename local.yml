@@ -11,3 +11,14 @@ services:
       - .:/app
     ports:
       - 8000:8000
+    depends_on:
+      - postgres
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: postgres:10
+    container_name: postgres_01
+    env_file: .env
+#    volumes:
+#      - /home/daniel/Desktop/postgres_deleteme:/var/lib/postgresql/data
