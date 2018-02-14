@@ -20,5 +20,6 @@ services:
     image: postgres:10
     container_name: postgres_01
     env_file: .env
-#    volumes:
-#      - /home/daniel/Desktop/postgres_deleteme:/var/lib/postgresql/data
+    volumes:
+      - /home/daniel/postgres_deleteme:/var/lib/postgresql/data
+      - /home/daniel/postgres_deleteme_backups:/backups
