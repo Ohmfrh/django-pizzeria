@@ -6,13 +6,14 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     container_name: pizzeria_01
-    command: bash -c "./manage.py migrate; ./manage.py runserver 0.0.0.0:8000"
+    command: /start.sh
     volumes:
       - .:/app
     ports:
       - 8000:8000
     depends_on:
       - postgres
+    env_file: .env
   postgres:
     build:
       context: .
