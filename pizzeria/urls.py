@@ -20,5 +20,6 @@ from place import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('menu/', views.Menu.as_view()),
-    path('orders/', views.Order.as_view())
+    path('orders/', views.CreateOrderView.as_view()),
+    path('orders/<int:order_id>/', views.EditOrderView.as_view(), name='edit_order'),
 ]
