@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
-from place.forms import OrderForm
-from place.models import Pizza
+from place.forms import OrderForm, AddPizzaForm
+from place.models import Pizza, Order
 
 
 def order(request):
@@ -23,7 +24,7 @@ class Menu(View):
         return render(request, 'index.html', {'pizzas': Pizza.objects.all()})
 
 
-class Order(View, LoginRequiredMixin):
+class CreateOrderView(View, LoginRequiredMixin):
 
     def get(self, request):
         form = OrderForm()
@@ -31,11 +32,33 @@ class Order(View, LoginRequiredMixin):
         return render(request, 'create_order.html', {'form': form})
 
     def post(self, request):
-        print(request.POST)
         form = OrderForm(request.POST)
 
-        print(f"Valid: {form.is_valid()}")
         if form.is_valid():
-            form.save()
+            order = form.save()
+
+            return redirect(f"/orders/{order.pk}/")
+
+        return render(request, 'create_order.html', {'form': form})
+
+
+class EditOrderView(View, LoginRequiredMixin):
+
+    def get(self, request, order_id):
+        form = AddPizzaForm()
+        order = Order.objects.get(pk=order_id)
+        return render(request, 'edit_order.html', {'form': form,
+                                                   'order': order})
+
+    def post(self, request, order_id):
+        form = AddPizzaForm(request.POST)
+
+        print(f"POST FORM: {form.is_valid()}")
+        if form.is_valid():
+            receipt_item = form.save(commit=False)
+            order = Order.objects.get(pk=order_id)
+            receipt_item.order = order
+            receipt_item.save()
+            return redirect(f"/orders/{order.pk}/")
 
         return render(request, 'create_order.html', {'form': form})
