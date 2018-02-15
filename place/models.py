@@ -36,6 +36,7 @@ class PizzaRecipe(models.Model):
 class Order(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=150)
+    closed_at = models.DateTimeField(null=True, blank=True)
 
     pizzas = models.ManyToManyField('place.Pizza', through='place.ReceiptItem')
 
