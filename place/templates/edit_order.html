@@ -1,0 +1,60 @@
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Order</title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Edit Order</h1>
+    {% if order.closed_at is None or request.user.is_superuser %}
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/orders/{{ order.pk }}/" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <form action="/orders/{{ order.pk }}/close/" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default">Close order</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <th>Pizza</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                </thead>
+                <tbody>
+                {% for item in order.receiptitem_set.all %}
+                    <tr>
+                        <td>{{ item.pizza.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.get_subtotal }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {{ item }}
+
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap.min.js' %}"></script>
+</body>
+</html>
