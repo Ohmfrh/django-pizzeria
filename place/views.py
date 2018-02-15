@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 
 from place.forms import OrderForm, AddPizzaForm
@@ -45,8 +46,12 @@ class CreateOrderView(View, LoginRequiredMixin):
 class EditOrderView(View, LoginRequiredMixin):
 
     def get(self, request, order_id):
+        try:
+            order = Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            return redirect('/orders/')
         form = AddPizzaForm()
-        order = Order.objects.get(pk=order_id)
+
         return render(request, 'edit_order.html', {'form': form,
                                                    'order': order})
 
@@ -62,3 +67,12 @@ class EditOrderView(View, LoginRequiredMixin):
             return redirect(f"/orders/{order.pk}/")
 
         return render(request, 'create_order.html', {'form': form})
+
+
+class CloseOrderForm(View, LoginRequiredMixin):
+
+    def post(self, request, order_id):
+        order = Order.objects.get(pk=order_id)
+        order.closed_at = timezone.now()
+        order.save()
+        return redirect(f"/orders/{order.pk}/")

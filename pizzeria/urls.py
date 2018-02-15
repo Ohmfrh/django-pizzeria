@@ -22,4 +22,5 @@ urlpatterns = [
     path('menu/', views.Menu.as_view()),
     path('orders/', views.CreateOrderView.as_view()),
     path('orders/<int:order_id>/', views.EditOrderView.as_view(), name='edit_order'),
+    path('orders/<int:order_id>/close/', views.CloseOrderForm.as_view(), name='close_order'),
 ]
