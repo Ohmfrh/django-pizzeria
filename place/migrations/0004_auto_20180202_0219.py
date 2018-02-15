@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Order',
+            name='CreateOrderView',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('customer', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='place.Customer')),

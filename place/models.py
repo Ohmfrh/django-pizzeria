@@ -33,24 +33,17 @@ class PizzaRecipe(models.Model):
         return f"{self.pizza.name} ingredient: {self.ingredient.name}"
 
 
-class Customer(models.Model):
+class Order(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=150)
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-
-class Order(models.Model):
-
-    customer = models.ForeignKey('place.Customer', on_delete=models.SET_NULL, null=True)
-    pizzas = models.ManyToManyField('place.Pizza', through='place.Placeholder')
+    pizzas = models.ManyToManyField('place.Pizza', through='place.ReceiptItem')
 
     def __str__(self):
-        return f"Order {self.pk}, Customer: {self.customer} Total: ${self.get_total()}"
+        return f"CreateOrderView {self.pk}, Customer: {self.first_name} Total: ${self.get_total()}"
 
     def get_total(self):
-        return self.placeholder_set.all().aggregate(
+        return self.receiptitem_set.all().aggregate(
             total=models.Sum(
                 models.F('pizza__price') * models.F('quantity'),
                 output_field=models.DecimalField(decimal_places=2)
@@ -58,7 +51,7 @@ class Order(models.Model):
         )['total']
 
 
-class Placeholder(models.Model):
+class ReceiptItem(models.Model):
     quantity = models.IntegerField()
 
     pizza = models.ForeignKey('place.Pizza', on_delete=models.CASCADE)
