@@ -13,14 +13,14 @@ services:
       - 8000:8000
     depends_on:
       - postgres
-    env_file: .localenv
+    env_file: .env.local
   postgres:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
     image: postgres:10
     container_name: postgres_01
-    env_file: .localenv
+    env_file: .env.local
     volumes:
       - postgres_data_local:/var/lib/postgresql/data
       - postgres_backup_local:/backups
