@@ -6,3 +6,4 @@ POSTGRES_DB=pizzeria
 
 # General Settings
 DJANGO_SECRET_KEY=*x+8_f3+5*jgy)w9s#w1wn^^zxk+gz#^bz0l%9g*ok*rs+&9v+
+DJANGO_DEBUG=True
