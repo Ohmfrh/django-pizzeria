@@ -10,9 +10,7 @@ who I recommend anyone to check out to handle your projects or use as
 reference to structure your own Django projects.
 
 
-### OS Package Requirements for this project ###
-
-* * *
+## OS Package Requirements for this project ##
 
 * Python 3+
 * Docker
