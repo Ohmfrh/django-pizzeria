@@ -12,6 +12,7 @@ reference to structure your own Django projects.
 
 ## OS Package Requirements for this project ##
 
+
 * Python 3+
 * Docker
 
