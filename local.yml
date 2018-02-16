@@ -22,5 +22,9 @@ services:
     container_name: postgres_01
     env_file: .localenv
     volumes:
-      - /home/daniel/postgres_deleteme:/var/lib/postgresql/data
-      - /home/daniel/postgres_deleteme_backups:/backups
+      - postgres_data_local:/var/lib/postgresql/data
+      - postgres_backup_local:/backups
+
+volumes:
+  postgres_data_local: {}
+  postgres_backup_local: {}
