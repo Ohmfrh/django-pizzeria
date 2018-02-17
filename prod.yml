@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    container_name: pizzeria_01
+    command: /gunicorn.sh
+    depends_on:
+      - postgres
+    env_file: .env.local
+    volumes:
+      - static_content:/app/static_prod
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: postgres:10
+    container_name: postgres_01
+    env_file: .env.local
+    volumes:
+      - postgres_data_local:/var/lib/postgresql/data
+      - postgres_backup_local:/backups
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
+    container_name: nginx_01
+    ports:
+      - "0.0.0.0:80:80"
+    volumes:
+      - static_content:/staticfiles
+    depends_on:
+      - django
+
+volumes:
+  postgres_data_local: {}
+  postgres_backup_local: {}
+  static_content: {}
